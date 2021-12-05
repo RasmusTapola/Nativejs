@@ -48,7 +48,7 @@ p{
 		</tr>
 	<tr>
 	<th> Hakusana:</th>
-	<th colspan="2"><input type="text" id="hakusana" id="hakusana"></th>
+	<th colspan="2"><input type="text" id="hakusana"></th>
 	<th><input type="button" value="Hae" id="hakunappi"></th>
 	</tr>
 
@@ -61,7 +61,6 @@ p{
 		</tr>
 	</thead>
 	<tbody>
-	
 	</tbody>
 </table>
 <script>	
@@ -85,36 +84,39 @@ $(document).ready(function(){
 	});
 	
 	$("#hakusana").focus();
+		haeAsiakkaat();
 });
 
 function haeAsiakkaat(){
 	$("#listaus tbody").empty();
-	$.ajax({
-		url:"asiakkaat/"+$("#hakusana").val(),
+	$.getJSON({
+		url:"Asiakkaat/"+$("#hakusana").val(),
 		type:"GET",
 		dataType:"json",
 		success:function(result){
 			
-			$.each(result.asiakkaat, function(i, field){
+			$.each(result.Asiakkaat, function(i, field){
 				var htmlStr;
-				htmlStr+="<tr>";
+				htmlStr+="<tr id='rivi_"+field.asiakas_id+"'>";
 				htmlStr+="<td>"+field.etunimi+"</td>";
 				htmlStr+="<td>"+field.sukunimi+"</td>";
 				htmlStr+="<td>"+field.puh+"</td>";
 				htmlStr+="<td>"+field.sposti+"</td>";
+				htmlStr+="<td><a href='muutaasiakas.jsp?etunimi="+field.etunimi+"'>Muuta</a>&nbsp;"
+				htmlStr+="<span class='poista' onclick=poista("+field.asiakas_id+",'"+field.etunimi+"','"+field.sukunimi+"')>Poista</span></td>";
 				htmlStr+="</tr>";
 				$("#listaus tbody").append(htmlStr);
 				});
 			}});
 		}
-function poista(etunimi){
-	if(confirm("Poista asiakas " + etunimi +"?")){
-		$.ajax({url:"asiakkaat/"+etunimi, type:"DELETE", dataType:"json", success:function(result) { 
+function poista(asiakas_id,etunimi,sukunimi){
+	if(confirm("Poista asiakas " + etunimi + " " + sukunimi + "?")){
+		$.ajax({url:"Asiakkaat/"+asiakas_id, type:"DELETE", dataType:"json", success:function(result) { 
 	        if(result.response==0){
 	        	$("#ilmo").html("Asiakkaan poisto epäonnistui.");
 	        }else if(result.response==1){
-	        	$("#rivi_"+etunimi)
-	        	alert("Asiakkaan " + etunimi +" poisto onnistui.");
+	        	$("#rivi_"+asiakas_id)
+	        	alert("Asiakkaan " + etunimi + sukunimi +" poisto onnistui.");
 				haeAsiakkaat();        	
 			}
 	    }});

@@ -37,7 +37,7 @@
 	</table>
 </form>
 <span id="ilmo"></span>
-</body>
+
 <script>
 $(document).ready(function(){
 	$("#takaisin").click(function(){
@@ -60,7 +60,7 @@ $(document).ready(function(){
 		},
 		sposti:{
 			required: true,
-			minlength: 8
+			email: true
 		}
 	},
 	messages: {
@@ -78,7 +78,7 @@ $(document).ready(function(){
 		},
 		sposti:{
 			required: "Puuttuu",
-			minlength: "Liian lyhyt"
+			email: "Ei kelpaa"
 	}
 },
 	submitHandler: function(form){
@@ -89,15 +89,16 @@ $(document).ready(function(){
 
 function lisaaTiedot(){
 	var formJsonStr = formDataJsonStr($("#tiedot").serializeArray());
-	$.ajax({url:"asiakkaat", data:formJsonStr, type:"POST", dataType:"json", success:function(result){
+	$.ajax({url:"Asiakkaat", data:formJsonStr, type:"POST", dataType:"json", success:function(result){
 		if(result.response==0){
-			$("#ilmo").html("Auton lis‰‰minen ep‰onnistui.");
+			$("#ilmo").html("Asiakkaan lis‰‰minen ep‰onnistui.");
 		}
 		else if (result.response==1){
-			$("#ilmo").html("Auton lis‰‰minen onnistui.");
+			$("#ilmo").html("Asiakkaan lis‰‰minen onnistui.");
 			$("#etunimi", "#sukunimi", "#puh","#sposti").val("");
 		}
 		}});
 }
 </script>
+</body>
 </html>
