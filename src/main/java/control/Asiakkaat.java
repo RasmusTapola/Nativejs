@@ -107,5 +107,6 @@ public class Asiakkaat extends HttpServlet {
 		}else{
 			out.println("response:0");  
 	
-		}}
+		}
+		}
 }
